@@ -4,7 +4,7 @@ import crypto from "crypto";
 import { env } from "@config/env";
 import { authRepository } from "./auth.repository";
 import { AppError } from "core/errors/app-error";
-import { sendVerificationEmail } from "core/utils/mailer";
+import { publishToQueue, QUEUES } from "../../queue/producer";
 
 export const authService = {
 
@@ -22,7 +22,7 @@ export const authService = {
       verificationToken,
     });
 
-    await sendVerificationEmail(email, verificationToken);
+    await publishToQueue(QUEUES.EMAIL_VERIFICATION, { email, token: verificationToken });
 
     return { message: "Регистрация успешна. Проверьте email для подтверждения." };
   },

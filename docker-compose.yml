@@ -28,9 +28,9 @@ services:
       - "5000:5000"
     environment:
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/crm_db
-      JWT_SECRET: your_jwt_secret
-      REFRESH_SECRET: your_refresh_secret
-      RESEND_API_KEY: your_resend_api_key
+      JWT_SECRET: supersupersecretkey
+      REFRESH_SECRET: my_super_secret_refresh_key_2024
+      RESEND_API_KEY: re_2sGcSkLB_N76buFsD3wUmy3vd2YkZVN1e
       CLIENT_URL: http://localhost:5175
       NODE_ENV: production
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
@@ -43,10 +43,20 @@ services:
     container_name: crm_notification
     environment:
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
-      RESEND_API_KEY: your_resend_api_key
+      RESEND_API_KEY: re_2sGcSkLB_N76buFsD3wUmy3vd2YkZVN1e
       CLIENT_URL: http://localhost:5175
     depends_on:
       - rabbitmq
+ 
+  payment:
+    build: ../payment-service
+    container_name: crm_payment
+    environment:
+        RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+        STRIPE_SECRET_KEY: 123456
+    depends_on:
+        - rabbitmq
+
 
 volumes:
   postgres_data:
